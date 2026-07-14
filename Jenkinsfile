@@ -78,4 +78,3 @@ pipeline {
             echo 'pipeline is aborted'
         }
     }
-}
