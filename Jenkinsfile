@@ -50,7 +50,7 @@ pipeline {
                             sh """
                                 aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com
 
-                                docker build -t ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} .
+                               docker build -t ${env.ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${env.PROJECT}/${env.COMPONENT}:${env.APP_VERSION} .
 
                                 docker images
 
