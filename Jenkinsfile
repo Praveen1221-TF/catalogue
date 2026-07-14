@@ -10,8 +10,8 @@ pipeline {
         COURSE = "Jenkins"
         appVersion = ""
         AccountID = "008616580268"
-        Project= "roboshop"
-        Component = "catalogue"
+        PROJECT = "roboshop"
+        COMPONENT = "catalogue"
     }
 
     options {
