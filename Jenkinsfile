@@ -9,6 +9,9 @@ pipeline {
     environment {
         COURSE = "Jenkins"
         appVersion = ""
+        AccountID = "008616580268"
+        Project= "roboshop"
+        Component = "catalogue"
     }
 
     options {
@@ -43,36 +46,20 @@ pipeline {
         stage('Build Image') {
             steps {
                 script{
-                    sh '''
-                        docker build -t catalogue: ${appVersion}
-                    '''
+                    withAWS(region:'us-east-1',credentials:'aws-cred') {
+                        sh '''
+                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AccountID}.dkr.ecr.us-east-1.amazonaws.com
+                            docker build ${AccountID}.dkr.ecr.us-east-1.amazonaws.com/${Project}/${Component}:${appVersion}
+                            docker images
+                            docker push ${AccountID}.dkr.ecr.us-east-1.amazonaws.com/${Project}/${Component}:${appVersion}
+
+                        '''
+    
                  }
             }
         }
 
-        stage('Deploy') {
-            // input {
-            //     message "Should we continue?"
-            //     ok "Yes, we should."
-            //     submitter "alice,bob"
-            //     parameters {
-            //         string(name: 'PERSON', defaultValue: 'Mr Jenkins', description: 'Who should I say hello to?')
-            //     }    
-
-             when { 
-                expression { "$params.DEPLOY" == "true" }
-
-            }
-            steps {
-                script{
-                    sh '''
-                        echo "Deploying"
-
-                    '''
-                 }
-            }
-        }
-    }
+        
 
     post{
         always{
