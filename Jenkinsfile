@@ -8,8 +8,8 @@ pipeline {
     }
     environment {
         COURSE = "Jenkins"
-        appVersion = ""
-        AccountID = "008616580268"
+        APP_VERSION = ""
+        ACCOUNT_ID = "008616580268"
         PROJECT = "roboshop"
         COMPONENT = "catalogue"
     }
@@ -26,8 +26,8 @@ pipeline {
                 script{
                     
                         def packageJSON = readJSON file: 'package.json'
-                        appVersion = packageJSON.version
-                        echo " app version is: ${appVersion}"
+                        env.APP_VERSION = packageJSON.version
+                        echo "App version: ${env.APP_VERSION}"
                     
                 }
             }
@@ -47,14 +47,15 @@ pipeline {
             steps {
                 script{
                     withAWS(region:'us-east-1',credentials:'aws-cred') {
-                        sh '''
-                            aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${AccountID}.dkr.ecr.us-east-1.amazonaws.com
-                            docker build ${AccountID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
-                            docker images
-                            docker push ${AccountID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${appVersion}
+                            sh """
+                                aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com
 
-                        '''
-    
+                                docker build -t ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION} .
+
+                                docker images
+
+                                docker push ${ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/${PROJECT}/${COMPONENT}:${APP_VERSION}
+                            """
                          }
                     }
              }
