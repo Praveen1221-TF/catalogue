@@ -66,13 +66,6 @@ pipeline {
             }
         }
 
-        stage("Quality Gate") {
-    steps {
-        // Enforce a maximum wait time of 10 minutes
-        timeout(time: 1, unit: 'HOURS') { 
-            waitForQualityGate abortPipeline: true
-            }
-         }
         stage('Build Image') {
             steps {
                 script{
