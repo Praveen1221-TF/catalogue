@@ -8,3 +8,5 @@ jobs:
         component: catalogue
         environment: dev  #dev
       secrets: inherit
+
+      
