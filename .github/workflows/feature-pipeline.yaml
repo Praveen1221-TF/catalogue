@@ -7,5 +7,5 @@ jobs:
         project: roboshop
         component: catalogue
         environment: dev  #dev
-      secrets: inherits
-      
+        secrets: inherits
+
